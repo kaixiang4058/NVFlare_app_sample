@@ -1,0 +1,54 @@
+branch1:
+  model.classes: 2
+  model.encoder_name: resnest26d
+  model.lrbackbone: nvidia/mit-b1
+  model.lrscale: 8
+  model.type: MSUnetHub
+  model_seed: 42
+branch2:
+  model.classes: 2
+  model.encoder_name: nvidia/mit-b1
+  model.lrbackbone: nvidia/mit-b1
+  model.lrscale: 8
+  model.type: MSUnetHub
+  model_seed: 84
+classes:
+- tissue
+- tumor
+expname: MRCPSmrcpsmix__sd42_e20
+expset:
+  env_seed: 42
+  epochs: 20
+  exp_seed: 42
+  fold: 1
+  labelWSI: 5
+  lrratio: 8
+  model_seed: 42
+  precision: 16
+  totalWSI: 75
+loss:
+  type: CrossEntropyLoss
+modelname: MRCPS
+modelnum: 2
+optim:
+  lr: 0.01
+  type: SGD
+project: HistSeg
+sched:
+  lr_end: 0.002
+  type: PolyDecayWarmUp
+sslset:
+  consistencyratio: 1.0
+  type: mrcpsmix
+testdl:
+  batchsize: 1
+  patchsize: 512
+  stridesize: 384
+  tifpage: 0
+traindl:
+  accumulate_grad_batches: 1
+  batchsize: 20
+  patchsize: 512
+  sda: false
+  stridesize: 384
+  tifpage: 0

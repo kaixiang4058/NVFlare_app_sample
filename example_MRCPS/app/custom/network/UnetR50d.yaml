@@ -1,0 +1,6 @@
+# https://smp.readthedocs.io/
+# DeepLabV3Plus, Unet, UnetPlusPlus
+# efficientnet-b3, se_resnext50_32x4d, timm-resnest50d
+# pytorch, imagenet, xavier_uniform, xavier_normal, kaiming_uniform, kaiming_normal
+model.type: "Unet"
+model.encoder_name: "resnet50d"

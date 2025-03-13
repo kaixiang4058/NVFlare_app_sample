@@ -1,0 +1,48 @@
+trainer: # Required.
+  epochs: 15
+  eval_on: True
+  optimizer:
+    type: SGD
+    kwargs:
+      lr: 0.01  # 4GPUs
+      momentum: 0.9
+      weight_decay: 0.0001
+  lr_scheduler:
+    mode: poly
+    kwargs:
+      power: 0.9
+  unsupervised:
+    TTA: False
+    drop_percent: 80
+    apply_aug: cutmix
+  contrastive:
+    negative_high_entropy: True
+    low_rank: 1
+    high_rank: 20
+    current_class_threshold: 0.3
+    current_class_negative_threshold: 1
+    unsupervised_entropy_ignore: 80
+    low_entropy_threshold: 20
+    num_negatives: 50
+    num_queries: 256
+    temperature: 0.5
+
+net: # Required.
+  num_classes: 2
+  sync_bn: True
+  ema_decay: 0.99
+  aux_loss:
+    aux_plane: 1024
+    loss_weight: 0.4
+  encoder:
+    type: models.u2pl.models.resnet.resnet50
+    kwargs:
+      multi_grid: True
+      zero_init_residual: True
+      fpn: True
+      replace_stride_with_dilation: [False, True, True]  #layer0...1 is fixed, layer2...4
+  decoder:
+    type: models.u2pl.models.decoder.dec_deeplabv3_plus
+    kwargs:
+      inner_planes: 256
+      dilations: [12, 24, 36]

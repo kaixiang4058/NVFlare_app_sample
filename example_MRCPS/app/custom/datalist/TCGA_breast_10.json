@@ -1,0 +1,24 @@
+{
+    "train" : {
+        "unlabel" : [
+            "TCGA-5L-AAT0-01Z-00-DX1.5E171263-30BF-4C6B-88A1-E8EA0522A861",
+            "HCM-CSHL-0366-C50-01A-01-S2-HE.39290D4D-2977-4960-B5A5-84872019A995",
+            "TCGA-A2-A0CP-01Z-00-DX1.ECFD263C-BB17-4ADA-8F2C-654C2AA4C45F",
+            "HCM-CSHL-0250-C50-01A-01-S2-HE.306D10B8-970E-4DB3-B283-D209BED44198",
+            "TCGA-A2-A0ES-01Z-00-DX1.5652EE30-48C1-4EC1-AD77-8C72DFCB9A97",
+            "TCGA-A2-A0CL-01Z-00-DX1.5342E971-DCD2-42C4-B4FF-E6942A95829E",
+            "TCGA-A2-A0EO-01A-01-MSA.a8ba9ddd-967b-428f-aef6-81207cb53e35",
+            "TCGA-A2-A0EO-01A-01-TSA.36f29540-ef11-4f71-bfa7-170e5f037a0a",
+            "TCGA-A2-A0CP-01A-01-TSA.0e422cec-f6cb-44b0-a386-d0e862300b90",
+            "TCGA-A2-A0CS-01A-01-TSA.1c053f5f-ca22-41a9-b815-681eb2a4ea5e"
+        ]
+    },
+    "valid" : {
+        "label" : [
+        ]
+    },
+    "test" : {
+        "label" : [
+        ]
+    }
+}

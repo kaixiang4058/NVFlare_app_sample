@@ -1,0 +1,79 @@
+# SemiSegPathology_test SemiSegPathology
+project: 'HistSeg'
+expname: ''
+
+expset: {
+  labelWSI: 5,
+  totalWSI: 75,
+  fold: 1,
+  #fversion: None,
+  epochs: 3,
+  exp_seed: 42,
+  env_seed: 42,
+  model_seed: 42,
+  precision: 16,
+  lrratio: 8,
+  }
+
+# rootset: {
+#   # Data path
+#   dataroot: '/work/u7085556/SemiSegPathology',
+#   # pkl
+#   pklroot_train: 'l0_p512_s512_train',
+#   pklroot_test: 'l0_p512_s512_test',
+#   # datalist
+#   datalist: './dataset/fold_testAll.json',
+#   fl: True
+# }
+
+# SSL setting
+# type: sup, mix, cps, cpsmix, cpseval, cpsevalmix
+# cuttype: cut, cow
+# isevalloss: True, False
+sslset: {
+  type: 'mrcpsmix',
+  consistencyratio: 1.0,
+}
+
+classes: ["tissue", "tumor"]
+
+# CrossEntropyLoss, BCEWithLogitsLoss, BCEDiceLoss
+loss: {
+  type: "CrossEntropyLoss",
+}
+
+# CosineAnnealingWR, CosineDecayWarmUp, PolyDecayWarmUp
+optim: {
+  type: "SGD",
+  lr: 0.01
+}
+sched: {
+  type: "PolyDecayWarmUp",
+  lr_end: 0.002
+}
+
+# MRUnetRnst, MRSFormer1
+branch1: './network/MRUnestFormer.yaml'
+branch2: './network/MRUSFormer.yaml'
+# branch1: './config/network/UnetCNN.yaml'
+# branch2: './config/network/UnetFormer.yaml'
+# branch3: './config/network/UnetTissue.yaml'
+
+traindl: {
+  patchsize: 512,
+  stridesize: 384,
+  tifpage: 0,
+  batchsize:  20,
+  accumulate_grad_batches: 1,
+  sda: false
+}
+
+testdl: {
+  patchsize: 512,
+  stridesize: 384,
+  tifpage: 0,
+  batchsize: 1,
+}
+
+
+

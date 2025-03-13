@@ -1,0 +1,38 @@
+{
+  "format_version": 2,
+
+  "executors": [
+    {
+      "tasks": [
+        "train", "submit_model", "validate"
+      ],
+      "executor": {
+        "id": "Executor",
+        "path": "nvflare.app_common.executors.learner_executor.LearnerExecutor",
+        "args": {
+          "learner_id": "zlearner"
+        }
+      }
+    }
+  ],
+
+  "task_result_filters": [
+  ],
+  "task_data_filters": [
+  ],
+
+  "components": [
+    {
+      "id": "tumor_learner",
+      "path": "learner.tumorLearner.LiverTumorLearner",
+      "args": {
+        "data_dir":"/dataset/",
+        "data_seed":42,
+        "lr": 3e-4,
+        "epochs": 2,
+        "batch_size":16,
+        "val_freq":0
+    }
+    }
+  ]
+}

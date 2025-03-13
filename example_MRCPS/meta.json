@@ -1,0 +1,23 @@
+{
+  "name": "tumor",
+  "resource_spec": {
+    "site-1": {
+        "num_of_gpus": 2,
+        "mem_per_gpu_in_GiB": 16
+    },
+    "site-2": {
+        "num_of_gpus": 1,
+        "mem_per_gpu_in_GiB": 16
+    },
+    "site-3": {
+        "num_of_gpus": 1,
+        "mem_per_gpu_in_GiB": 16
+    }
+  },
+  "min_clients" : 1,
+  "deploy_map": {
+    "app": [
+      "@ALL"
+    ]
+  }
+}

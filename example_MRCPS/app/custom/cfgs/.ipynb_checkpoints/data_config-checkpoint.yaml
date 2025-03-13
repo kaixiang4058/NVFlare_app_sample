@@ -1,0 +1,107 @@
+# SemiSegPathology_test SemiSegPathology
+project: 'HistSeg'
+expname: ''
+
+expset: {
+  labelWSI: 5,
+  totalWSI: 75,
+  fold: 1,
+  #fversion: None,
+  epochs: 20,
+  exp_seed: 42,
+  env_seed: 42,
+  model_seed: 42,
+  precision: 16,
+  lrratio: 8,
+  }
+
+rootset: {
+  #--Data path--
+  #liver dataset
+  # dataroot: '/work/u7085556/SemiSegPathology/',
+  # tifroot: '/work/u7085556/SemiSegPathology/tifs',
+  # maskroot: '/work/u7085556/SemiSegPathology/masks',
+
+  #Tiger dataset
+  dataroot: '/work/u2676425/dataset/tiger_dataset/tiger-training/',
+  tifroot: '/work/u2676425/dataset/tiger_dataset/tiger-training/wsirois/wsi-level-annotations/images',
+  maskroot: '/work/u2676425/dataset/tiger_dataset/tiger-training/wsirois/wsi-level-annotations/MRCPS_masks_refine',
+  # maskroot: '/work/u2676425/dataset/tiger_dataset/tiger-training/wsirois/wsi-level-annotations/MRCPS_masks_refine',
+
+  #Camelyon dataset
+  # dataroot: '/work/u2676425/dataset/Camelyon17/',
+  # tifroot: '/work/u2676425/dataset/camelyon17/images',
+  # maskroot: '/work/u2676425/dataset/camelyon17/masks',
+
+  #--pkl--
+  #liver dataset
+  # pklroot_label: '/work/u7085556/SemiSegPathology/l0_p512_s512_train',
+  # pklroot_unlabel: '/work/u7085556/SemiSegPathology/l0_p512_s512_train',
+  # pklroot_test: '/work/u7085556/SemiSegPathology/l0_p512_s512_test',
+
+  # Tiger dataset
+  pklroot_label: '/work/u2676425/dataset/tiger_dataset/tiger-training/MRCPS_tigerRefine_p512_s128_train_labeled',
+  # pklroot_train: '/work/u2676425/dataset/tiger_dataset/tiger-training/MRCPS_p512_s128_train_labeled',
+  pklroot_unlabel: '/work/u2676425/dataset/tiger_dataset/tiger-training/MRCPS_p512_s512_train_unlabeled',
+  pklroot_test: '/work/u2676425/dataset/tiger_dataset/tiger-training/MRCPS_tigerRefine_p512_s128_train_labeled',
+
+  #Camelyon dataset
+  # pklroot_train: '/work/u2676425/dataset/camelyon17/annotation_pkls/MRCPS_Camelyon_p512_s384_label_pkls',
+  # pklroot_train_unlabel: '/work/u2676425/dataset/camelyon17/annotation_pkls/MRCPS_Camelyon_p512_s384_unlabel_pkls',
+  # pklroot_test: '/work/u2676425/dataset/camelyon17/annotation_pkls/MRCPS_Camelyon_p512_s384_label_pkls',
+
+  #--datalist--
+  # datalist: './datalist/liver_used.json',
+  datalist: './datalist/fold_tiger_used.json',
+
+  fl: True
+}
+
+# SSL setting
+# type: sup, mix, cps, cpsmix, cpseval, cpsevalmix
+# cuttype: cut, cow
+# isevalloss: True, False
+sslset: {
+  type: 'mrcpsmix',
+  consistencyratio: 1.0,
+}
+
+classes: ["tissue", "tumor"]
+
+# CrossEntropyLoss, BCEWithLogitsLoss, BCEDiceLoss
+# loss: {
+#   type: "CrossEntropyLoss",
+# }
+
+# CosineAnnealingWR, CosineDecayWarmUp, PolyDecayWarmUp
+# optim: {
+#   type: "SGD",
+#   lr: 0.01
+# }
+# sched: {
+#   type: "PolyDecayWarmUp",
+#   lr_end: 0.002
+# }
+
+# MRUnetRnst, MRSFormer1
+# branch1: './config/network/MRUnestFormer.yaml'
+# branch2: './config/network/MRUSFormer.yaml'
+# branch1: './config/network/UnetCNN.yaml'
+# branch3: './config/network/UnetFormer.yaml'
+# branch2: './config/network/UnetTissue.yaml'
+
+traindl: {
+  patchsize: 512,
+  stridesize: 384,
+  tifpage: 0,
+  batchsize:  8, #minimine 4
+  accumulate_grad_batches: 1
+}
+
+testdl: {
+  patchsize: 512,
+  stridesize: 384,
+  tifpage: 0,
+  batchsize: 8,
+}
+
