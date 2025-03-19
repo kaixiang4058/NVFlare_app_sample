@@ -1,7 +1,4 @@
-# NVFlare_app_sample
-nvflare app structure sample code
 
-<br/>
 
 ## NVFlare job code structure
 * job_name/
@@ -15,9 +12,10 @@ nvflare app structure sample code
         * requirement (環境、套件需求，也可提供docker img路徑)
         (ps.根據各人訓練設計，簡單架構也可以只使用learner與model即可)
 
-<br/>
+NVFlare job-local2FL: https://nvflare.readthedocs.io/en/2.4/programming_guide/execution_api_type.html#modellearner
 
 ## Learner Introudction
+
 
 
 ### import lib
@@ -36,50 +34,128 @@ from nvflare.apis.dxo import DXO, DataKind, MetaKey, from_shareable
 class PersonalLearner(Learner):
     def __init__(self):
         super().__init__()
+        - set fl parameter (fl)
+        * set personal parameter (custom)
 
+    def initialize(self, model: FLModel):
+        - fl app root (fl)
+        - save path (fl)
+        * preprocess dataset (custom)
+        * model load (custom)
+    
+    def finalize(self, model: FLModel):
+        - result save (fl)
+    
     def train(self, model: FLModel) -> Union[str, FLModel]:
-        """
-        Called by the framework to perform training. Can be called many times during the lifetime of the Learner.
-        
-        Args:
-            model: the training input model
-
-        Returns: train result as a FLModel if successful; or return code as str if failed.
-
-        """
-        pass
-
-    def get_model(self, model_name: str) -> Union[str, FLModel]:
-        """
-        Called by the framework to return the trained model from the Learner.
-
-        Args:
-            model_name: type of the model for validation
-
-        Returns: trained model; or return code if failed
-
-        """
-        pass
+        - fl info load (fl)
+        - model weight load (fl)
+        * perform training. (custom) -> alwas use func:local_train
+        - fl info transfer (fl)
 
     def validate(self, model: FLModel) -> Union[str, FLModel]:
-        """
-        Called by the framework to validate the model with the specified weights in dxo
-
-        Args:
-            model: the FLModel object that contains model weights to be validated
-
-        Returns: validation metrics in FLModel if successful; or return code if failed.
-
-        """
-        pass
+        - fl info load (fl)
+        - model weight load (fl)
+        * perform training. (custom) -> alwas use func:local_train
+        - fl info transfer (fl)
 
 ```
-* 須注意非程式import的檔案讀取路徑(可參考範例中的self.app_root, self.cfg_root讀取路徑)
-* 可參考範例程式修改(personal code section)
-
-
-
-
+* 須注意檔案讀取路徑(可參考範例job/中的self.app_root, self.cfg_root讀取路徑)
+* 可參考job/範例程式修改(personal code section)
 
 Nvidia NVFlare learner introduction:
 https://nvflare.readthedocs.io/en/2.4/programming_guide/execution_api_type/model_learner.html
+
+<br/>
+
+## 測試方法
+透過單一裝置以模擬方式進行運行測試，
+需要調成job/app/config的client與server的config檔案。
+(替換成custom learner與model)
+
+### 1. 調整FL client config -  learner change
+* 調整Eexecutors中personallearner (learner_id項提供custom learner名稱)
+* 調整compoents中learner資訊 (learner設置的init參數由此更動)
+```
+{
+  "format_version": 2,
+
+  "executors": [
+    {
+      "tasks": [
+        "train", "submit_model", "validate"
+      ],
+      "executor": {
+        "id": "Executor",
+        "path": "nvflare.app_common.executors.learner_executor.LearnerExecutor",
+        "args": {
+          "learner_id": "personalLearner"
+        }
+      }
+    }
+  ],
+
+  "components": [
+    {
+      "id": "personalLearner",
+      "path": "personalLearner.personalLearner",
+      "args": {
+        "data_seed":42,
+        "val_freq":0,
+        "epochs":1,
+        ---personal_args---
+      }
+    }
+  ]
+}
+
+```
+
+### 2. 調整FL server config -  learner change
+* model部分提供模型建置的程式碼與相關的參數
+```
+{
+  "format_version": 2,
+
+  "server": {
+    "heart_beat_timeout": 6000
+  },
+  "task_data_filters": [],
+  "task_result_filters": [],
+  "components": [
+    {
+      "id": "persistor",
+      "path": "nvflare.app_opt.pt.file_model_persistor.PTFileModelPersistor",
+      "args": {
+        "model": {
+          "path": "personal model build code (model.py)",
+          "args": {
+            ---personal_args--- (model config not learner config)
+          }
+        }
+      }
+    }
+  ]
+}
+
+```
+
+
+### 3. 單一裝置模擬指令
+```
+nvflare simulator job_name -w tmp_folder -n client_num -t thread_num -gpu gpu_id
+
+exmaple:
+nvflare simulator MRCPS -w ./tmp_workspace/ -n 3 -t 1 -gpu 0
+```
+
+<br/>
+
+## 常見問題
+1. 模型如果是用config資訊進行建立，可能會有路徑無法找到問題，因模擬路徑實際會再創建的temp_workspace底下，且每次執行都會重製。
+建議:模型讀取config路徑新增root位置，透過root+path提供絕對路徑資訊，如下:
+```
+example:
+config = {  "cfg_path":" config path",
+            "cfg_root":" config root"}
+config.load(os.path.join(config["cfg_root"],config["cfg_path"])) #提供絕對路徑
+```
