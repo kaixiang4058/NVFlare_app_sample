@@ -64,8 +64,12 @@ class PersonalLearner(Learner):
 * 須注意檔案讀取路徑(可參考範例job/中的self.app_root, self.cfg_root讀取路徑)
 * 可參考job/範例程式修改(personal code section)
 
-Nvidia NVFlare learner introduction:
+Nvidia NVFlare model learner introduction:
 https://nvflare.readthedocs.io/en/2.4/programming_guide/execution_api_type/model_learner.html
+(model learner != learner, model learner更精簡然而需要2.4版本以上，但大致架構相似)
+
+Example code:
+https://github.com/NVIDIA/NVFlare/tree/2.4/examples/advanced/cifar10/pt/learners
 
 <br/>
 
