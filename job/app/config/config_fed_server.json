@@ -12,9 +12,9 @@
       "path": "nvflare.app_opt.pt.file_model_persistor.PTFileModelPersistor",
       "args": {
         "model": {
-          "path": "models.modelmrcpsmix.MRCPSMixModel",
+          "path": "PersonalModel",
           "args": {
-            "cfg_path":"./cfgs/traincfg_mrcpsmix_mrmix.yaml"
+            "model_parameter":"model_parameter"
           }
         }
       }

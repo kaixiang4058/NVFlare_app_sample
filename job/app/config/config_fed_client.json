@@ -10,7 +10,7 @@
         "id": "Executor",
         "path": "nvflare.app_common.executors.learner_executor.LearnerExecutor",
         "args": {
-          "learner_id": "MRCPSLearner"
+          "learner_id": "PersonalLearner"
         }
       }
     }
@@ -23,12 +23,13 @@
 
   "components": [
     {
-      "id": "MRCPSLearner",
-      "path": "learner.MRCPSLearner.MRCPSLearner",
+      "id": "PersonalLearner",
+      "path": "PersonalLearner.PersonalLearner",
       "args": {
         "data_seed":42,
         "val_freq":0,
-        "epochs":1 
+        "epochs":1 ,
+        "personal_arg":"value"
       }
     }
   ]
