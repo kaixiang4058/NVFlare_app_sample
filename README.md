@@ -15,8 +15,6 @@ nvflare app structure sample code
         * requirement (環境、套件需求，也可提供docker img路徑)
         (ps.根據各人訓練設計，簡單架構也可以只使用learner與model即可)
 
-structure sample link: https://github.com/kaixiang4058/NVFlare_app_sample/edit/main/README.md
-
 <br/>
 
 ## Learner Introudction
